@@ -1,0 +1,49 @@
+* {
+    
+    background-color: white;
+}
+
+
+#header {
+    background-color: purple;
+}
+
+#toolbar {
+    width: 20%;
+    padding: 0px;
+    margin: 0px;  
+}
+
+#forecast {
+    display: flex;
+}
+
+
+#weatherData {
+    width: 80%;
+}
+
+#content {
+    display: flex;
+}
+
+.hide {
+    display: none;
+}
+
+.day *{
+    margin: 10px;
+    color: white;
+    background-color: gray;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.day {
+    margin: 10px;
+    color: white;
+    background-color: gray;
+    width: 20%;
+}
+

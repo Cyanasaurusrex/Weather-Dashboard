@@ -7,12 +7,52 @@
   <link rel="stylesheet" href="./assets/css/style.css"/>
 </head>
 <body>
-  <p>Search for a City:</p>
-  <textarea id="citySearch"></textarea>
-  <button id="searchButton">Search</button>
+  <p id="header">Weather Dashboard</p>
+  <div id="content">
+    <div id="toolbar">
+      <p>Search for a City:</p>
+      <textarea id="citySearch"></textarea>
+      <button id="searchButton">Search</button>
+    </div>
+    <div id="weatherData" class = "hide">
+      <div id="currentData">
+        <p id = "city"></p>
+        <p id = "currentTemp"></p>
+        <p id = "currentWind"></p>
+        <P id = "currentHumidity"></p>
+      </div>
+      <div id="forecast" class="hide">
+        <div id="day1" class = "day">
+          <p id="day1Temp"></p>
+          <p id="day1Wind"></p>
+          <p id="day1Humidity"></p>
+        </div>
+        <div id="day2" class = "day">
+          <p id="day2Temp"></p>
+          <p id="day2Wind"></p>
+          <p id="day2Humidity"></p>
+        </div>
+        <div id="day3" class = "day">
+          <p id="day3Temp"></p>
+          <p id="day3Wind"></p>
+          <p id="day3Humidity"></p>
+        </div>
+        <div id="day4" class = "day">
+          <p id="day4Temp"></p>
+          <p id="day4Wind"></p>
+          <p id="day4Humidity"></p>
+        </div>
+        <div id="day5" class = "day">
+          <p id="day5Temp"></p>
+          <p id="day5Wind"></p>
+          <p id="day5Humidity"></p>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
-  integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
-  crossorigin="anonymous"></script>
+    integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+    crossorigin="anonymous"></script>  
   <script src="./assets/js/script.js"></script>
 </body>
   
