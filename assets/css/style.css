@@ -5,22 +5,41 @@
 
 
 #header {
-    background-color: purple;
+    background-color: blue;
+    padding: 10px;
+    text-align: center;
+    color: white;
+}
+
+.addedButtons {
+    display: inline-block;
 }
 
 #toolbar {
     width: 20%;
     padding: 0px;
-    margin: 0px;  
+    margin: 0px; 
+    border-right: solid black;    
 }
 
 #forecast {
     display: flex;
 }
 
+#citySearch {
+    height: 1.5em;
+    overflow: hidden;
+    resize: none;
+    display: inline-block;    
+}
+
+#searchButton {
+    display: inline-block;
+}
+
 
 #weatherData {
-    width: 80%;
+    max-width: 80%;
 }
 
 #content {
@@ -31,8 +50,16 @@
     display: none;
 }
 
+#paragraph {
+    padding: 10px;
+}
+
+#currentData {
+    padding: 10px;
+}
+
 .day *{
-    margin: 10px;
+    padding: 10px;
     color: white;
     background-color: gray;
     align-items: center;
@@ -44,6 +71,10 @@
     margin: 10px;
     color: white;
     background-color: gray;
-    width: 20%;
+    max-width: 20%;
+}
+
+#topContainer {
+    border: 1px black;
 }
 
