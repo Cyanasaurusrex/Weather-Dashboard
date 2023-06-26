@@ -179,44 +179,43 @@
 // }
 
 let key = "21d11b007ade27ccee285312cfe144b9";
-
 cityName = "columbus"
 let currentWeather = {}
 
-
+//function for calling API and calculating weather data averages 
 function getInfo() {
-    // present data
+    // API call for present data
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${key}&units=imperial`)
         .then(function (data) {
             return (data.json())
         })
+        // Adds current weather data to currentWeather object
         .then(function (data) {
-            console.log(data)
             currentWeather.temp = data.main.temp
             currentWeather.wind = data.wind.speed
             currentWeather.humidity = data.main.humidity
-            console.log(currentWeather)
         })
 
-
-    // data for forecast
+    // API call for 5 day forecast 
     fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=imperial`)
         .then(function (data) {
             return (data.json())
         })
         .then(function (data) {
-            console.log(data)
+            // initializes calculation variables for weather data averages
             let averageTemp = []
             let averageHumidity = []
             let averageWind = []
             let currentDay = data.list[0].dt_txt.slice(0,10)
             let tempTemp = []
             let tempHumidity = []
-            let tempWind = []
-            
+            let tempWind = []            
 
-            // loops over data and adds it to forecastWeather object
+            // loops through all entries in API response
             for (let i=0; i< data.list.length; i++) {
+
+                // if the iterated data point is on a new day or the last data point in the set, average out the information 
+                // in the temporary arrays and push the average to the average arrays, then clear out temporary arrays
                 if ((currentDay != data.list[i].dt_txt.slice(0,10)) || (i == (data.list.length - 1))) {
                     currentDay = data.list[i].dt_txt.slice(0,10)
                     averageTemp.push(tempTemp.reduce((total, value) => total + value, 0) / tempTemp.length)
@@ -226,51 +225,37 @@ function getInfo() {
                     tempHumidity = []
                     tempWind = []                    
                 }
+
+                // Adds information to temporary array for use in average calculation later
                 tempTemp.push(data.list[i].main.temp)
                 tempHumidity.push(data.list[i].main.humidity)
                 tempWind.push(data.list[i].wind.speed)
             }
 
-            displayInfo(averageTemp, averageHumidity, averageWind)            
-            
-            console.log(averageTemp)
-            console.log(averageWind)
-            console.log(averageHumidity)
-           
-        })
-
-    
+            // calls function for displaying data with average arrays and current data as parameters
+            displayInfo(averageTemp, averageHumidity, averageWind, currentWeather)                       
+        })    
 }
 
+// Function for displaying data from API on webpage
 function displayInfo(averageTemp, averageHumidity, averageWind) {
+
     // variable for current time using dayjs()
     let now = dayjs()
 
+    // For 5 days, create HTML elements that display the relevant weather data and insert them into webpage HTML
     for (let i=1; i <= 5; i++) {
         const div = document.createElement('div')
         div.id = 'day' + i
         div.className = 'day'
-
         const html = 
         `<p id="day' + i + 'Display">${now.add(i, 'day').format('MM/DD/YYYY')}</p>` +
         `<p id="day' + i + 'Temp">Temp: ${averageTemp[i]}</p>` +
         `<p id="day' + i + 'Wind">Wind: ${averageWind[i]}</p>` +
         `<p id="day' + i + 'Humidity">Humidity: ${averageHumidity[i]}</p>`;
-
         div.innerHTML = html
-
         document.body.appendChild(div)
     }
-    
-
 }
 
 getInfo()
-
-
-
-
-
-
-
-
