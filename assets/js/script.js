@@ -179,13 +179,20 @@
 // }
 
 let key = "21d11b007ade27ccee285312cfe144b9";
-let cityName = "columbus"
-let cityNameUpper = cityName.charAt(0).toUpperCase() + cityName.slice(1)
-console.log(cityNameUpper)
+let cityName
+let cityNameUpper
 let currentWeather = {}
+let citySearch = document.getElementById('citySearch');
+let search = document.getElementById('searchButton')
+search.addEventListener('click', function () {
+    let cityName = citySearch.value
+    console.log(citySearch.value)
+    getInfo(cityName)
+    cityNameUpper = cityName.charAt(0).toUpperCase() + cityName.slice(1)
+})
 
 //function for calling API and calculating weather data averages 
-function getInfo() {
+function getInfo(cityName) {
     // API call for present data
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${key}&units=imperial`)
         .then(function (data) {
@@ -208,24 +215,24 @@ function getInfo() {
             let averageTemp = []
             let averageHumidity = []
             let averageWind = []
-            let currentDay = data.list[0].dt_txt.slice(0,10)
+            let currentDay = data.list[0].dt_txt.slice(0, 10)
             let tempTemp = []
             let tempHumidity = []
-            let tempWind = []            
+            let tempWind = []
 
             // loops through all entries in API response
-            for (let i=0; i< data.list.length; i++) {
+            for (let i = 0; i < data.list.length; i++) {
 
                 // if the iterated data point is on a new day or the last data point in the set, average out the information 
                 // in the temporary arrays and push the average to the average arrays, then clear out temporary arrays
-                if ((currentDay != data.list[i].dt_txt.slice(0,10)) || (i == (data.list.length - 1))) {
-                    currentDay = data.list[i].dt_txt.slice(0,10)
+                if ((currentDay != data.list[i].dt_txt.slice(0, 10)) || (i == (data.list.length - 1))) {
+                    currentDay = data.list[i].dt_txt.slice(0, 10)
                     averageTemp.push((tempTemp.reduce((total, value) => total + value, 0) / tempTemp.length).toFixed(2))
                     averageWind.push((tempWind.reduce((total, value) => total + value, 0) / tempWind.length).toFixed(2))
                     averageHumidity.push(Math.floor(tempHumidity.reduce((total, value) => total + value, 0) / tempHumidity.length))
                     tempTemp = []
                     tempHumidity = []
-                    tempWind = []                    
+                    tempWind = []
                 }
 
                 // Adds information to temporary array for use in average calculation later
@@ -235,45 +242,52 @@ function getInfo() {
             }
 
             // calls function for displaying data with average arrays and current data as parameters
-            displayInfo(averageTemp, averageHumidity, averageWind, currentWeather)                       
-        })    
+            displayInfo(averageTemp, averageHumidity, averageWind, currentWeather, cityName)
+        })
 }
 
 // Function for displaying data from API on webpage
-function displayInfo(averageTemp, averageHumidity, averageWind, currentWeather) {
-
-
+function displayInfo(averageTemp, averageHumidity, averageWind, currentWeather, cityName) {
 
     // Variable for current time using dayjs()
     let now = dayjs()
 
     // Gets elements of container divs
-    const forecastDiv = document.getElementById('forecast'); 
+    const forecastDiv = document.getElementById('forecast');
     const todayDiv = document.getElementById('today')
+    const toolbarDiv = document.getElementById('toolbar')
+
+    // HTML generation for previous city search button and event listener
+    const toolbar = document.createElement('button')
+    toolbar.textContent = cityNameUpper
+    toolbar.className = 'cityButton'
+    toolbar.addEventListener("click", function () {
+        getInfo(cityName)       
+    })
+    toolbarDiv.appendChild(toolbar)
 
     // HTML generation for current weather data
     const today = document.createElement('div')
-    const todayHTML = 
-    `<p id = "currentDay">${cityNameUpper} ${now.format('MM/DD/YYYY')}</p>
+    const todayHTML =
+        `<p id = "currentDay">${cityNameUpper} ${now.format('MM/DD/YYYY')}</p>
           <p id = "currentTemp">Temp: ${currentWeather.temp}°</p>
           <p id = "currentWind">Wind: ${currentWeather.wind}MPH</p>
           <p id = "currentHumidity">Humidity: ${currentWeather.humidity}%</p>`
     today.innerHTML = todayHTML
-    todayDiv.appendChild(today)    
+    todayDiv.appendChild(today)
 
     // For 5 days, create HTML elements that display the relevant weather data and insert them into webpage HTML
-    for (let i=1; i <= 5; i++) {
-        const div = document.createElement('div')
-        div.id = 'day' + i
-        div.className = 'day'
-        const dailyHTML = 
-        `<p id="day' + i + 'Display">${now.add(i, 'day').format('MM/DD/YYYY')}</p>
+    for (let i = 1; i <= 5; i++) {
+        const forecast = document.createElement('div')
+        forecast.id = 'day' + i
+        forecast.className = 'day'
+        forecast.classList.add('displayData')
+        const dailyHTML =
+            `<p id="day' + i + 'Display">${now.add(i, 'day').format('MM/DD/YYYY')}</p>
         <p id="day' + i + 'Temp">Temp: ${averageTemp[i]}°</p>
         <p id="day' + i + 'Wind">Wind: ${averageWind[i]}MPH</p>
         <p id="day' + i + 'Humidity">Humidity: ${averageHumidity[i]}%</p>`;
-        div.innerHTML = dailyHTML
-        forecastDiv.appendChild(div)
+        forecast.innerHTML = dailyHTML
+        forecastDiv.appendChild(forecast)
     }
 }
-
-getInfo()
