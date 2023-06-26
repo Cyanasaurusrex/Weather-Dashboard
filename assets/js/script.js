@@ -243,6 +243,25 @@ function getInfo() {
 }
 
 function displayInfo(averageTemp, averageHumidity, averageWind) {
+    // variable for current time using dayjs()
+    let now = dayjs()
+
+    for (let i=1; i <= 5; i++) {
+        const div = document.createElement('div')
+        div.id = 'day' + i
+        div.className = 'day'
+
+        const html = 
+        `<p id="day' + i + 'Display">${now.add(i, 'day').format('MM/DD/YYYY')}</p>` +
+        `<p id="day' + i + 'Temp">Temp: ${averageTemp[i]}</p>` +
+        `<p id="day' + i + 'Wind">Wind: ${averageWind[i]}</p>` +
+        `<p id="day' + i + 'Humidity">Humidity: ${averageHumidity[i]}</p>`;
+
+        div.innerHTML = html
+
+        document.body.appendChild(div)
+    }
+    
 
 }
 
